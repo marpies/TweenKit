@@ -37,15 +37,17 @@ import QuartzCore
     /**
      Removes a currently running animation
      - Parameter animation: The animation to remove
+     - Parameter forceFinish: Determines whether the animation is finished when removed
      */
-    public func remove(animation: Animation) {
+    public func remove(animation: Animation, forceFinish: Bool = true) {
         
         guard let index = animations.index(of: animation) else {
-            print("Can't find animation to remove")
             return
         }
         
-        animation.didFinish()
+        if forceFinish {
+            animation.didFinish()
+        }
         animations.remove(at: index)
         
         if animations.isEmpty {

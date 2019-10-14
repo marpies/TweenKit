@@ -8,17 +8,17 @@
 
 Pod::Spec.new do |s|
   s.name             = 'TweenKit'
-  s.version          = '0.5'
+  s.version          = '0.5.1'
   s.summary          = 'Animation library for iOS and tvOS'
 
   s.description      = <<-DESC
 TweenKit makes it easy to animate anything!
                        DESC
 
-  s.homepage         = 'https://github.com/SteveBarnegren/TweenKit'
+  s.homepage         = 'https://github.com/marpies/TweenKit'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'steve.barnegren@gmail.com' => 'steve.barnegren@gmail.com' }
-  s.source           = { :git => 'https://github.com/SteveBarnegren/TweenKit.git', :tag => s.version.to_s }
+  s.source           = { :git => 'https://github.com/marpies/TweenKit.git', :tag => s.version.to_s }
   s.social_media_url = 'https://twitter.com/SteveBarnegren'
 
   s.ios.deployment_target = '9.0'

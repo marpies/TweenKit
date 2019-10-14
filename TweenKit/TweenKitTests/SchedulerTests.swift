@@ -51,4 +51,33 @@ class SchedulerTests: XCTestCase {
         scheduler.progressTime(duration: duration + 0.1)
         XCTAssertEqual(scheduler.numRunningAnimations, 0)
     }
+    
+    func testAnimationFinishWhenRemoved() {
+        
+        var numCalls = 0
+        
+        let action1 = InterpolationAction(from: 0.0, to: 1.0, duration: 0.1, easing: .linear) {_ in }
+        action1.onBecomeInactive = {
+            numCalls += 1
+        }
+        let animation1 = Animation(action: action1)
+        scheduler.add(animation: animation1)
+        
+        scheduler.remove(animation: animation1, forceFinish: false)
+        
+        XCTAssertEqual(numCalls, 0)
+        
+        numCalls = 0
+        
+        let action2 = InterpolationAction(from: 0.0, to: 1.0, duration: 0.1, easing: .linear) {_ in }
+        action2.onBecomeInactive = {
+            numCalls += 1
+        }
+        let animation2 = Animation(action: action2)
+        scheduler.add(animation: animation2)
+
+        scheduler.remove(animation: animation2, forceFinish: true)
+
+        XCTAssertEqual(numCalls, 1)
+    }
 }
