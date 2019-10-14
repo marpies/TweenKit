@@ -46,6 +46,8 @@ public class Animation : Equatable {
     
     var elapsedTime: CFTimeInterval = 0
     
+    private(set) var didStart: Bool = false
+    
     private let action: SchedulableAction!
     
     // MARK: - Methods
@@ -53,6 +55,7 @@ public class Animation : Equatable {
     func willStart() {
         action.willBecomeActive()
         action.willBegin()
+        didStart = true
     }
     
     func didFinish() {

@@ -29,6 +29,12 @@ import QuartzCore
      - Parameter animation: The animation to run
      */
     public func add(animation: Animation) {
+        
+        if self.isPaused {
+            self.pausedAnimations.append(animation)
+            return
+        }
+        
         animations.append(animation)
         animation.willStart()
         startLoop()
@@ -42,6 +48,14 @@ import QuartzCore
     public func remove(animation: Animation, forceFinish: Bool = true) {
         
         guard let index = animations.index(of: animation) else {
+            
+            // Check if the animation is paused
+            if self.isPaused, let index = self.pausedAnimations.index(of: animation) {
+                if forceFinish {
+                    animation.didFinish()
+                }
+                self.pausedAnimations.remove(at: index)
+            }
             return
         }
         
@@ -64,6 +78,54 @@ import QuartzCore
         allAnimations.forEach{
             self.remove(animation: $0)
         }
+        
+        self.pausedAnimations.removeAll()
+    }
+    
+    /**
+     Pauses all animations
+     */
+    public func pause() {
+        guard !self.isPaused else {
+            return
+        }
+        
+        self.isPaused = true
+        
+        guard self.animations.count > 0 else {
+            return
+        }
+        
+        self.pausedAnimations.append(contentsOf: self.animations)
+        self.animations.removeAll()
+        
+        self.stopLoop()
+    }
+    
+    /**
+     Resumes any previously paused animations
+     */
+    public func resume() {
+        guard self.isPaused else {
+            return
+        }
+        
+        self.isPaused = false
+        
+        guard self.pausedAnimations.count > 0 else {
+            return
+        }
+        
+        for animation in self.pausedAnimations {
+            if !animation.didStart {
+                animation.willStart()
+            }
+        }
+        
+        self.animations.append(contentsOf: self.pausedAnimations)
+        self.pausedAnimations.removeAll()
+        
+        self.startLoop()
     }
     
     /**
@@ -75,8 +137,11 @@ import QuartzCore
 
     // MARK: - Properties
     
+    private(set) var isPaused: Bool = false
+    
     private var animations = [Animation]()
     private var animationsToRemove = [Animation]()
+    private var pausedAnimations = [Animation]()
 
     private var displayLink: DisplayLink?
     private var lastTimeStamp: CFTimeInterval?
