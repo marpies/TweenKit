@@ -25,12 +25,6 @@ class SchedulerTests: XCTestCase {
     
     func testSchedulerReturnsCorrectNumberOfAnimations() {
         
-        func addAnimation() {
-            let action = InterpolationAction(from: 0.0, to: 1.0, duration: 1.0, easing: .linear, update: { _ in })
-            let animation = Animation(action: action)
-            scheduler.add(animation: animation)
-        }
-        
         XCTAssertEqual(scheduler.numRunningAnimations, 0)
         addAnimation()
         XCTAssertEqual(scheduler.numRunningAnimations, 1)
@@ -38,6 +32,29 @@ class SchedulerTests: XCTestCase {
         XCTAssertEqual(scheduler.numRunningAnimations, 2)
         addAnimation()
         XCTAssertEqual(scheduler.numRunningAnimations, 3)
+    }
+    
+    func testPauseResume() {
+        
+        XCTAssertEqual(scheduler.numRunningAnimations, 0)
+        addAnimation()
+        let anim = addAnimation()
+        XCTAssertEqual(scheduler.numRunningAnimations, 2)
+        
+        scheduler.pause()
+        XCTAssertEqual(scheduler.numRunningAnimations, 0)
+        
+        addAnimation()
+        XCTAssertEqual(scheduler.numRunningAnimations, 0)
+        
+        scheduler.resume()
+        XCTAssertEqual(scheduler.numRunningAnimations, 3)
+        
+        scheduler.pause()
+        XCTAssertEqual(scheduler.numRunningAnimations, 0)
+        scheduler.remove(animation: anim)
+        scheduler.resume()
+        XCTAssertEqual(scheduler.numRunningAnimations, 2)
     }
     
     func testAnimationIsRemovedOnCompletion() {
@@ -79,5 +96,12 @@ class SchedulerTests: XCTestCase {
         scheduler.remove(animation: animation2, forceFinish: true)
 
         XCTAssertEqual(numCalls, 1)
+    }
+    
+    @discardableResult private func addAnimation() -> Animation {
+        let action = InterpolationAction(from: 0.0, to: 1.0, duration: 1.0, easing: .linear, update: { _ in })
+        let animation = Animation(action: action)
+        scheduler.add(animation: animation)
+        return animation
     }
 }
