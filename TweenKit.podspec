@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'TweenKit'
-  s.version          = '0.5.1'
+  s.version          = '0.5.2'
   s.summary          = 'Animation library for iOS and tvOS'
 
   s.description      = <<-DESC
