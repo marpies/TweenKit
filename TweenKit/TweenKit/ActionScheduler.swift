@@ -47,10 +47,10 @@ import QuartzCore
      */
     public func remove(animation: Animation, forceFinish: Bool = true) {
         
-        guard let index = animations.index(of: animation) else {
+        guard let index = animations.firstIndex(of: animation) else {
             
             // Check if the animation is paused
-            if self.isPaused, let index = self.pausedAnimations.index(of: animation) {
+            if self.isPaused, let index = self.pausedAnimations.firstIndex(of: animation) {
                 if forceFinish {
                     animation.didFinish()
                 }

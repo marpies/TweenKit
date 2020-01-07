@@ -23,7 +23,7 @@ TweenKit makes it easy to animate anything!
 
   s.ios.deployment_target = '9.0'
   s.tvos.deployment_target = '9.0'
-  s.swift_version = '4.2'
+  s.swift_version = '5.0'
 
   s.source_files = 'TweenKit/TweenKit/*.swift'
   s.frameworks = 'UIKit'
